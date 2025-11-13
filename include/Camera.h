@@ -37,6 +37,7 @@ namespace MotionDetect {
         void eye();
         void wrover();
         void ESP32_Cam();
+        void s3wroom();
 
         /**
          * Camera control functions
@@ -78,6 +79,7 @@ namespace MotionDetect {
         void _m5wide(camera_config_t* config);
         void _eye(camera_config_t* config);
         void _wrover(camera_config_t* config);
+        void _s3wroom(camera_config_t* config);
         // Helper functions for enum to string conversion
         const char* _getFrameSizeName(framesize_t frameSize);
         const char* _getPixelFormatName(pixformat_t pixelFormat);

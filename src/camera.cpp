@@ -46,6 +46,7 @@ namespace MotionDetect {
     void Camera::eye() { _eye(&_config); }
     void Camera::wrover() { _wrover(&_config); }
     void Camera::ESP32_Cam() { _aithinker(&_config); }
+    void Camera::s3wroom() { _s3wroom(&_config); }
 
     /**
      * Initialize the camera
@@ -362,24 +363,23 @@ namespace MotionDetect {
         config->pin_reset = -1;
     }
 
-    void Camera::_wrover(camera_config_t* config) {
-        config->pin_d0 = 4;
-        config->pin_d1 = 5;
-        config->pin_d2 = 18;
-        config->pin_d3 = 19;
-        config->pin_d4 = 36;
-        config->pin_d5 = 39;
-        config->pin_d6 = 34;
-        config->pin_d7 = 35;
-        config->pin_xclk = 21;
-        config->pin_pclk = 22;
-        config->pin_vsync = 25;
-        config->pin_href = 23;
-        config->pin_sccb_sda = 26;
-        config->pin_sccb_scl = 27;
+    void Camera::_s3wroom(camera_config_t* config) {
+        config->pin_d0 = 11;
+        config->pin_d1 = 9;
+        config->pin_d2 = 8;
+        config->pin_d3 = 10;
+        config->pin_d4 = 12;
+        config->pin_d5 = 18;
+        config->pin_d6 = 17;
+        config->pin_d7 = 16;
+        config->pin_xclk = 15;
+        config->pin_pclk = 13;
+        config->pin_vsync = 6;
+        config->pin_href = 7;
+        config->pin_sccb_sda = 4;
+        config->pin_sccb_scl = 5;
         config->pin_pwdn = -1;
         config->pin_reset = -1;
-        config->xclk_freq_hz = 20000000;
     }
 
 } // namespace MotionDetect

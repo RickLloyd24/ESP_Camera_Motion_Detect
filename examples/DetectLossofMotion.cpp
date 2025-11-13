@@ -31,9 +31,6 @@ void setup() {
     else {
         ESP_LOGI("SUCCESS", "Camera OK");
     }
-    /* Update camera sensor settings */
-    setCamSensor->set_brightness(setCamSensor, 1);    //increase brightness by 1 level
-    setCamSensor->set_vflip(setCamSensor, 1);         // flip the picture vertically
 }
 
 void loop() {
