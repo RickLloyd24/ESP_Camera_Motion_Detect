@@ -381,7 +381,24 @@ namespace MotionDetect {
         config->pin_pwdn = -1;
         config->pin_reset = -1;
     }
-
+    void Camera::_wrover(camera_config_t* config) {
+        config->pin_d0 = 4;
+        config->pin_d1 = 5;
+        config->pin_d2 = 18;
+        config->pin_d3 = 19;
+        config->pin_d4 = 36;
+        config->pin_d5 = 39;
+        config->pin_d6 = 34;
+        config->pin_d7 = 35;
+        config->pin_xclk = 21;
+        config->pin_pclk = 22;
+        config->pin_vsync = 25;
+        config->pin_href = 23;
+        config->pin_sccb_sda = 26;
+        config->pin_sccb_scl = 27;
+        config->pin_pwdn = -1;
+        config->pin_reset = -1;
+    }
 } // namespace MotionDetect
 
 // Global camera instance definition
