@@ -1,8 +1,3 @@
-//
-// Created by Simone on 08/09/22.
-// Motion detection implementation file
-//
-
 #include "Motion.h"
 
 #define minImageSize 96*96   // Minimum image size to process
@@ -99,11 +94,13 @@ namespace MotionDetect {
     uint16_t Motion::getWidth() { return _image.m_width; }
     uint16_t Motion::getHeight() { return _image.m_height; }
     float Motion::getlightLevel() { return lightLevel; }
-    void Motion::clearbaseline() {baselineflag = false; }
 
     int Motion::baseline(uint8_t * buf, size_t bufSize) {
-        newbaselineflag = true;
         baselineflag = true;
+        return detect(buf, bufSize);
+    }
+    int Motion::setbaseline(uint8_t * buf, size_t bufSize) {
+        setbaselineflag = true;
         return detect(buf, bufSize);
     }
 
@@ -156,7 +153,6 @@ namespace MotionDetect {
         pixelArrayIndex = 0;  // Reset pixel array index for each frame
         numPixelChanges = 0;  // Reset pixel change counter for each frame
         lightLevel = 0.0;    // Reset light level for each frame
-        if (!baselineflag) {newbaselineflag = true;}
         while ((status = pjpeg_decode_mcu()) != PJPG_NO_MORE_BLOCKS) {
             switch (_image.m_scanType) {
                 case PJPG_GRAYSCALE:
@@ -183,7 +179,7 @@ namespace MotionDetect {
         }
         percentPixelDiff = (float)numPixelChanges / (float)(pixelArrayIndex) * 100.0;
         lightLevel = lightLevel / (float)(pixelArraySize);
-        newbaselineflag = false;
+        setbaselineflag = false; baselineflag = false;
         //Serial.println("Light Level: " + String(lightLevel));
         //Serial.printf("Changes: %04d, Percent: %f, Motion detected: %d \n",  numPixelChanges, percentPixelDiff, percentPixelDiff > minPercentPixelDiff);
         if (percentPixelDiff > minPercentPixelDiff) {
@@ -193,6 +189,26 @@ namespace MotionDetect {
         return flag;
     }
 
+    /**
+     * Detect pixel changes from previous frame to current frame
+     * when pixel change is above threshold, increment numPixelChanges
+     * @param p - number of pixels in current block
+     */
+    void Motion::detectPixChg(uint8_t p) {
+        // Bounds checking to prevent heap corruption
+        if (pixelCntArray == nullptr || pixelArrayIndex >= pixelArraySize) {
+            return;
+        }
+        
+        if (setbaselineflag) {
+            pixelCntArray[pixelArrayIndex] = p;
+        }
+        if(absdiff(p, pixelCntArray[pixelArrayIndex]) > minPixelChange) numPixelChanges++;
+        if (!baselineflag)
+             pixelCntArray[pixelArrayIndex] = p; // Update if not comparing to baseline
+        lightLevel += p;
+        pixelArrayIndex++;
+    }
     /**
      * Allocate or reallocate the pixel buffer
      * @param numBytes - number of bytes to allocate for the buffer
@@ -217,25 +233,6 @@ namespace MotionDetect {
                 pixelArraySize = 0;
             }
         }
-    }
-
-    /**
-     * Detect pixel changes from previous frame to current frame
-     * when pixel change is above threshold, increment numPixelChanges
-     * @param p - number of pixels in current block
-     */
-    void Motion::detectPixChg(uint8_t p) {
-        // Bounds checking to prevent heap corruption
-        if (pixelCntArray == nullptr || pixelArrayIndex >= pixelArraySize) {
-            return;
-        }
-        
-        if(absdiff(p, pixelCntArray[pixelArrayIndex]) > minPixelChange) numPixelChanges++;
-        lightLevel += p;
-        if (newbaselineflag) {
-            pixelCntArray[pixelArrayIndex] = p;
-        }
-        pixelArrayIndex++;
     }
 
 } // namespace MotionDetect

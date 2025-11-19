@@ -1,7 +1,3 @@
-//
-// Created by Simone on 08/09/22.
-//
-
 #ifndef MOTIONDETECT_MOTION_H
 #define MOTIONDETECT_MOTION_H
 
@@ -47,7 +43,6 @@ namespace MotionDetect {
         void setMinChanges(int value);                    //set minimum number of pixels that must change to count as motion  
         void setMinBufSizeChanges(float value);           //set minimum number of pixels that must change to count as motion  
         void setMotionCount(int value);                   //value 1 = first motion, 2 = both motion methods
-        void clearbaseline();                             //clear baseline frame for motion detection
 
         // Information getters
         float getPercentDiff();                           //return last percent difference calculated
@@ -55,9 +50,10 @@ namespace MotionDetect {
         uint16_t getWidth();                              //return image width calculated by the JPEG decoder function
         uint16_t getHeight();                             //return image height calculated by the JPEG decoder function
         float getlightLevel();                            //returns approximate light level <10 completely black, >90 bright light
-
-        int detect(uint8_t * buf, size_t bufSize);        //return 0 if error, 1 if motion detected, 2 if both motion methods detected
-        int baseline(uint8_t * buf, size_t bufSize);      //sets a baseline frame for motion detection
+                                                          //returns 0 no motion, 1 if motion detected, 2 if both motion methods detected
+        int detect(uint8_t * buf, size_t bufSize);        //compares new frame to previous frame for motion detection
+        int baseline(uint8_t * buf, size_t bufSize);      //compares new frame to baseline frame for motion detection
+        int setbaseline(uint8_t * buf, size_t bufSize);   //sets a baseline frame for motion detection, returns 0
 
     protected:
         uint16_t pixelArrayIndex;
@@ -74,7 +70,7 @@ namespace MotionDetect {
         int motionCount = 1;
         float lightLevel = 0.0;
         boolean baselineflag = false;  // Baseline frame set flag
-        boolean newbaselineflag = false;  // New baseline frame set flag
+        boolean setbaselineflag = false;  // New baseline frame set flag
 
         /**
          * Allocate or reallocate the pixel buffer

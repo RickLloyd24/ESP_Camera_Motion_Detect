@@ -1,8 +1,3 @@
-//
-// Created by Simone on 07/09/22.
-// Camera implementation file
-//
-
 #include "Camera.h"
 #include <Arduino.h>
 

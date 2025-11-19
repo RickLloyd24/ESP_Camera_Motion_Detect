@@ -1,7 +1,3 @@
-//
-// Created by Simone on 07/09/22.
-//
-
 #ifndef MOTIONDETECT_CAMERA_H
 #define MOTIONDETECT_CAMERA_H
 
